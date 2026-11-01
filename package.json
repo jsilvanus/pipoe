@@ -1,6 +1,7 @@
 {
   "name": "pipoe",
   "version": "0.1.0",
+  "packageManager": "pnpm@11.23.0",
   "description": "PoE switch controller service and CLI (PLANET SGS-4210 via SNMP) in the Raspberry Pi production ecosystem",
   "private": true,
   "type": "module",
@@ -30,5 +31,12 @@
     "dist",
     "bin",
     "openapi"
-  ]
+  ],
+  "pi": {
+    "service": "pipoe",
+    "displayName": "pipoe",
+    "port": 3302,
+    "healthEndpoint": "/health",
+    "envPortVar": "PIPOE_PORT"
+  }
 }
