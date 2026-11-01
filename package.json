@@ -34,6 +34,7 @@
   ],
   "pi": {
     "service": "pipoe",
+    "layer": "Layer 1: Southbound hardware",
     "displayName": "pipoe",
     "port": 3108,
     "healthEndpoint": "/health",
