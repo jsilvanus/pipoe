@@ -39,7 +39,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
     port: int(env["PIPOE_PORT"], 3302),
     mode: env["PIPOE_MODE"] === "production" ? "production" : "simulation",
     apiKey: env["PIPOE_API_KEY"]?.trim() || undefined,
-    switchHost: env["PIPOE_SWITCH_HOST"]?.trim() || "192.168.1.2",
+    switchHost: env["PIPOE_SWITCH_HOST"]?.trim() || "192.168.0.100",
     snmpPort: int(env["PIPOE_SNMP_PORT"], 161),
     snmpCommunity: community,
     snmpWriteCommunity: env["PIPOE_SNMP_WRITE_COMMUNITY"]?.trim() || community,
