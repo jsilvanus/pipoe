@@ -35,7 +35,7 @@
   "pi": {
     "service": "pipoe",
     "displayName": "pipoe",
-    "port": 3302,
+    "port": 3108,
     "healthEndpoint": "/health",
     "envPortVar": "PIPOE_PORT"
   }

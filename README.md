@@ -22,11 +22,11 @@ Safety: only ports with a name in `PIPOE_PORT_NAMES` can be switched (reads work
 pnpm install
 pnpm run build
 PIPOE_MODE=production pnpm start    # default mode is simulation (a fake 16-port switch)
-pnpm exec pipoe list                     # CLI, PIPOE_URL defaults to http://127.0.0.1:3302
+pnpm exec pipoe list                     # CLI, PIPOE_URL defaults to http://127.0.0.1:3108
 pnpm exec pipoe cycle cam1
 ```
 
-Configuration is in `.env.example`. Defaults to port 3302.
+Configuration is in `.env.example`. Defaults to port 3108.
 
 ## Switch setup (SNMP)
 

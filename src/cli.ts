@@ -2,7 +2,7 @@
 import type { PortState, SwitchSnapshot } from "./types.js";
 
 const args = process.argv.slice(2);
-let url = process.env["PIPOE_URL"] ?? "http://127.0.0.1:3302";
+let url = process.env["PIPOE_URL"] ?? "http://127.0.0.1:3108";
 let json = false;
 const rest: string[] = [];
 for (let i = 0; i < args.length; i++) {
