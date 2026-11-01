@@ -1,0 +1,53 @@
+{
+  "openapi": "3.0.3",
+  "info": { "title": "pipoe", "version": "0.1.0", "description": "PoE switch controller (PLANET SGS-4210 via SNMP). Optional bearer token (PIPOE_API_KEY) on /api." },
+  "paths": {
+    "/health": { "get": { "summary": "Liveness and mode", "responses": { "200": { "description": "ok" } } } },
+    "/api/v1/poe": {
+      "get": { "summary": "All ports and PoE totals", "responses": { "200": { "description": "Snapshot", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Snapshot" } } } }, "502": { "description": "Switch unreachable" } } }
+    },
+    "/api/v1/poe/ports/{port}": {
+      "get": { "summary": "One port by number or name", "parameters": [{ "$ref": "#/components/parameters/port" }], "responses": { "200": { "description": "Port", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Port" } } } }, "404": { "description": "Unknown port" } } }
+    },
+    "/api/v1/poe/ports/{port}/power": {
+      "post": {
+        "summary": "Switch PoE on or off (named ports only)",
+        "parameters": [{ "$ref": "#/components/parameters/port" }],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object", "required": ["enabled"], "properties": { "enabled": { "type": "boolean" } } } } } },
+        "responses": { "200": { "description": "Port state read back", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Port" } } } }, "403": { "description": "Port not named" }, "409": { "description": "Port busy" }, "502": { "description": "Switch unreachable or did not apply" } }
+      }
+    },
+    "/api/v1/poe/ports/{port}/cycle": {
+      "post": {
+        "summary": "Off, wait, on (named ports only)",
+        "parameters": [{ "$ref": "#/components/parameters/port" }],
+        "requestBody": { "content": { "application/json": { "schema": { "type": "object", "properties": { "offMs": { "type": "number", "minimum": 1000, "maximum": 60000, "default": 5000 } } } } } },
+        "responses": { "200": { "description": "Port state after power returned", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Port" } } } }, "403": { "description": "Port not named" }, "409": { "description": "Port busy" }, "502": { "description": "Switch unreachable or did not apply" } }
+      }
+    }
+  },
+  "components": {
+    "parameters": { "port": { "name": "port", "in": "path", "required": true, "schema": { "type": "string" }, "description": "Port number (1-16) or configured name, e.g. cam1" } },
+    "schemas": {
+      "Port": {
+        "type": "object",
+        "properties": {
+          "port": { "type": "integer" },
+          "name": { "type": "string" },
+          "poeEnabled": { "type": "boolean" },
+          "status": { "type": "string", "enum": ["delivering", "searching", "disabled", "fault", "other"] },
+          "delivering": { "type": "boolean" },
+          "link": { "type": "string", "enum": ["up", "down", "unknown"] },
+          "powerW": { "type": "number", "nullable": true }
+        }
+      },
+      "Snapshot": {
+        "type": "object",
+        "properties": {
+          "ports": { "type": "array", "items": { "$ref": "#/components/schemas/Port" } },
+          "totals": { "type": "object", "properties": { "budgetW": { "type": "number", "nullable": true }, "consumedW": { "type": "number", "nullable": true } } }
+        }
+      }
+    }
+  }
+}
