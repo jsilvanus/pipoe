@@ -43,6 +43,10 @@ The driver reads, per `PIPOE_PSE_GROUP` (default 1) and port:
 
 Per-port watts are not in the standard MIB, and I could not find PLANET's MIB for the GS-4210 series online. Get the MIB files from PLANET's support site, or walk the enterprise subtree `1.3.6.1.4.1.10456` on the switch. If the switch's own MIB has them, set `PIPOE_SNMP_PORT_POWER_OID` (prefix, the port number is appended) and `PIPOE_SNMP_PORT_POWER_SCALE` (multiplier to watts). Otherwise `powerW` is `null`.
 
+### Probe results so far (2026-11-01)
+
+SNMP is disabled on the switch; enabling it waits for Wednesday. The switch web UI (login form `POST /cgi-bin/dispatcher.cgi?cmd=1`) does show per-port PoE watts (at that moment ports 4, 7, 14 and 15 drew 4.0, 2.6, 13.4 and 0.4 W), so the hardware reports it. A web-scraping fallback is deliberately not built; add one only if SNMP turns out not to expose per-port power.
+
 ### Read-only probes to confirm on the real switch
 
 Run from the Pi (needs `snmp` tools); these only read:
