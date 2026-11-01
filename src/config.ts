@@ -36,7 +36,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
   const scale = Number.parseFloat(env["PIPOE_SNMP_PORT_POWER_SCALE"] ?? "0.001");
   return {
     host: env["PIPOE_HOST"] ?? "0.0.0.0",
-    port: int(env["PIPOE_PORT"], 3302),
+    port: int(env["PIPOE_PORT"], 3108),
     mode: env["PIPOE_MODE"] === "production" ? "production" : "simulation",
     apiKey: env["PIPOE_API_KEY"]?.trim() || undefined,
     switchHost: env["PIPOE_SWITCH_HOST"]?.trim() || "192.168.0.100",

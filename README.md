@@ -19,14 +19,14 @@ Safety: only ports with a name in `PIPOE_PORT_NAMES` can be switched (reads work
 ## Run
 
 ```bash
-npm install
-npm run build
-PIPOE_MODE=production npm start    # default mode is simulation (a fake 16-port switch)
-npx pipoe list                     # CLI, PIPOE_URL defaults to http://127.0.0.1:3302
-npx pipoe cycle cam1
+pnpm install
+pnpm run build
+PIPOE_MODE=production pnpm start    # default mode is simulation (a fake 16-port switch)
+pnpm exec pipoe list                     # CLI, PIPOE_URL defaults to http://127.0.0.1:3108
+pnpm exec pipoe cycle cam1
 ```
 
-Configuration is in `.env.example`. Defaults to port 3302.
+Configuration is in `.env.example`. Defaults to port 3108.
 
 ## Switch setup (SNMP)
 
@@ -63,7 +63,7 @@ snmpwalk -v2c -c $C $SW 1.3.6.1.4.1.10456         # PLANET enterprise subtree (f
 
 ## Development
 
-`npm test` runs the unit tests (simulated switch, fake SNMP session, HTTP via `inject`). `npm run build` type-checks and compiles.
+`pnpm test` runs the unit tests (simulated switch, fake SNMP session, HTTP via `inject`). `pnpm run build` type-checks and compiles.
 
 ## Pi ecosystem
 
