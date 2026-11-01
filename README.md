@@ -1,6 +1,6 @@
 # pipoe
 
-Small service and CLI that talks to the PoE switch of the Raspberry Pi production ecosystem and switches power to named devices: read which ports are active and what they draw, turn PoE on or off per port, or cycle a port. First target: the **PLANET SGS-4210-16P2S** at `192.168.0.100` (16 gigabit PoE ports + 2 SFP) in the church rack. It currently answers on its factory-default address 192.168.0.100 (MAC a8:f7:e0:6b:fc:52, found by the Pi thread), not on the 192.168.1.x network the rest of the AV gear uses; the Pi cannot reach it permanently yet, and SNMP has to be enabled in the switch web UI. Set `PIPOE_SWITCH_HOST` when the address changes.
+Small service and CLI that talks to the PoE switch of the Raspberry Pi production ecosystem and switches power to named devices: read which ports are active and what they draw, turn PoE on or off per port, or cycle a port. First target: the **PLANET GS-4210-16P2S** at `192.168.0.100` (16 gigabit PoE ports + 2 SFP) in the church rack. It currently answers on its factory-default address 192.168.0.100 (MAC a8:f7:e0:6b:fc:52, found by the Pi thread), not on the 192.168.1.x network the rest of the AV gear uses; the Pi cannot reach it permanently yet, and SNMP has to be enabled in the switch web UI. Set `PIPOE_SWITCH_HOST` when the address changes.
 
 Scope is deliberately small: on-demand reads and switches only. No polling, no watchdog and no automatic cycling. Callers (for example picam's camera freeze handling, see `jsilvanus/picam` `docs/camera-diagnostics-proposal.md`) decide when to cycle.
 
@@ -41,7 +41,7 @@ The driver reads, per `PIPOE_PSE_GROUP` (default 1) and port:
 | Link (ifOperStatus) | `1.3.6.1.2.1.2.2.1.8.<port>` (assumes ifIndex = port number) |
 | PoE budget / consumed, watts | `1.3.6.1.2.1.105.1.3.1.1.2.<group>` / `.4.<group>` |
 
-Per-port watts are not in the standard MIB. If the switch's own MIB has them, set `PIPOE_SNMP_PORT_POWER_OID` (prefix, the port number is appended) and `PIPOE_SNMP_PORT_POWER_SCALE` (multiplier to watts). Otherwise `powerW` is `null`.
+Per-port watts are not in the standard MIB, and I could not find PLANET's MIB for the GS-4210 series online. Get the MIB files from PLANET's support site, or walk the enterprise subtree `1.3.6.1.4.1.10456` on the switch. If the switch's own MIB has them, set `PIPOE_SNMP_PORT_POWER_OID` (prefix, the port number is appended) and `PIPOE_SNMP_PORT_POWER_SCALE` (multiplier to watts). Otherwise `powerW` is `null`.
 
 ### Read-only probes to confirm on the real switch
 
