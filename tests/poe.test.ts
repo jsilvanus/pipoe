@@ -136,3 +136,23 @@ test("SNMP driver reads RFC 3621 OIDs and writes admin enable", async () => {
   assert.deepEqual(access.sets, [[`${OID.portAdminEnable}.1.2`, 1]]);
   assert.equal((await sw.readAll()).ports[1]!.poeEnabled, true);
 });
+
+import { mkdtempSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { loadEnvFile } from "../src/env-file.js";
+
+test("loadEnvFile reads .env without overriding existing variables", () => {
+  const dir = mkdtempSync(join(tmpdir(), "pipoe-env-"));
+  writeFileSync(join(dir, ".env"), "PIPOE_SNMP_COMMUNITY=fromfile\nPIPOE_SWITCH_HOST=192.168.1.2\n");
+  const env: NodeJS.ProcessEnv = { PIPOE_SWITCH_HOST: "10.0.0.9" };
+  assert.equal(loadEnvFile(env, dir), join(dir, ".env"));
+  assert.equal(env["PIPOE_SNMP_COMMUNITY"], "fromfile");
+  assert.equal(env["PIPOE_SWITCH_HOST"], "10.0.0.9");
+});
+
+test("loadEnvFile: missing default .env is skipped, missing PIPOE_ENV_FILE is an error", () => {
+  const dir = mkdtempSync(join(tmpdir(), "pipoe-env-"));
+  assert.equal(loadEnvFile({}, dir), null);
+  assert.throws(() => loadEnvFile({ PIPOE_ENV_FILE: "nope.env" }, dir), /PIPOE_ENV_FILE not found/);
+});

@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import "./load-env.js";
 import type { PortState, SwitchSnapshot } from "./types.js";
 
 const args = process.argv.slice(2);
