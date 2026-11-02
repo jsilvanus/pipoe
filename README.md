@@ -28,6 +28,8 @@ pnpm exec pipoe cycle cam1
 
 Configuration is in `.env.example`. Defaults to port 3108.
 
+The service and the CLI read a `.env` file from the working directory at startup (or the file named by `PIPOE_ENV_FILE`, which must exist). Variables already set in the environment win over the file, so a systemd `EnvironmentFile=` still overrides it. Keep the file out of git (it is in `.gitignore`) and `chmod 600` it: it holds the SNMP communities.
+
 ## Switch setup (SNMP)
 
 On the PLANET switch enable SNMP (v2c) and set a read community; a write community is needed for on/off/cycle. Put them in `PIPOE_SNMP_COMMUNITY` / `PIPOE_SNMP_WRITE_COMMUNITY`. Never commit them.
